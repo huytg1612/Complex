@@ -4,13 +4,20 @@ services:
  - docker
 
 before_install:
- - docker build -f ./client/Dockerfile.dev -t huytg/react-test ./client
+ - docker build -f ./client/Dockerfile.dev -t huytg1999/react-test ./client
 
 script:
- - docker run huytg/react-test npm test -- --coverage
+ - docker run huytg1999/react-test npm test -- --coverage
 
 after_success:
- - docker build -t huytg/multi-client -f ./client/Dockerfile ./client
- - docker build -t huytg/multi-nginx -f ./nginx/Dockerfile ./nginx
- - docker build -t huytg/multi-server -f ./server/Dockerfile ./server
- - docker build -t huytg/multi-worker -f ./worker/Dockerfile ./worker
+ - docker build -t huytg1999/multi-client -f ./client/Dockerfile ./client
+ - docker build -t huytg1999/multi-nginx -f ./nginx/Dockerfile ./nginx
+ - docker build -t huytg1999/multi-server -f ./server/Dockerfile ./server
+ - docker build -t huytg1999/multi-worker -f ./worker/Dockerfile ./worker
+ #Login to DockerCLI
+ - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" -- password-stdin
+ #Take these above images and push it to DockerHub
+ - docker push huytg1999/multi-client
+ - docker push huytg1999/multi-nginx
+ - docker push huytg1999/multi-server
+ - docker push huytg1999/multi-worker
