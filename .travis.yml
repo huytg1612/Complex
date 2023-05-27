@@ -16,7 +16,7 @@ after_success:
  - docker build -t huytg1999/multi-server -f ./server/Dockerfile ./server
  - docker build -t huytg1999/multi-worker -f ./worker/Dockerfile ./worker
  #Login to DockerCLI
- - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" -- password-stdin
+ - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
  #Take these above images and push it to DockerHub
  - docker push huytg1999/multi-client
  - docker push huytg1999/multi-nginx
