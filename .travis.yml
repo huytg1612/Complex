@@ -1,0 +1,16 @@
+language: generic
+sudo: required
+services:
+ - docker
+
+before_install:
+ - docker build -f ./client/Dockerfile.dev -t huytg/react-test ./client
+
+script:
+ - docker run huytg/react-test npm test -- --coverage
+
+after_success:
+ - docker build -t huytg/multi-client -f ./client/Dockerfile ./client
+ - docker build -t huytg/multi-nginx -f ./nginx/Dockerfile ./nginx
+ - docker build -t huytg/multi-server -f ./server/Dockerfile ./server
+ - docker build -t huytg/multi-worker -f ./worker/Dockerfile ./worker
