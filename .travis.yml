@@ -1,16 +1,21 @@
 language: generic
 sudo: required
+#Init docker
 services:
  - docker
 
+#Build image
 before_install:
  - docker build -f ./client/Dockerfile.dev -t huytg1999/react-test ./client
 
+#Run test
 script:
  #- docker run huytg1999/react-test npm test -- --coverage
  - docker run -e CI=true huytg1999/react-test npm test
 
+#When test run successfully
 after_success:
+ #Build images
  - docker build -t huytg1999/multi-client -f ./client/Dockerfile ./client
  - docker build -t huytg1999/multi-nginx -f ./nginx/Dockerfile ./nginx
  - docker build -t huytg1999/multi-server -f ./server/Dockerfile ./server
@@ -22,3 +27,15 @@ after_success:
  - docker push huytg1999/multi-nginx
  - docker push huytg1999/multi-server
  - docker push huytg1999/multi-worker
+
+deploy:
+  provider: elasticbeanstalk
+  region: "ap-southeast-1"
+  app: "multi-docker"
+  env: "MultiDocker-env"
+  bucket_name: "elasticbeanstalk-ap-southeast-1-560176329885"
+  bucket_path: "docker-multi"
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
+  on:
+    branch: master
