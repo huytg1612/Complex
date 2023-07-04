@@ -1,7 +1,14 @@
-FROM node:16-alpine
+# FROM node:16-alpine
+# WORKDIR "/app"
+# COPY ./package.json ./
+# #RUN npm install cross-env
+# RUN npm install 
+# COPY . .
+# CMD [ "npm", "run", "start" ]
+
+FROM node:alpine
 WORKDIR "/app"
 COPY ./package.json ./
-#RUN npm install cross-env
-RUN npm install 
+RUN npm install
 COPY . .
-CMD [ "npm", "run", "start" ]
+CMD ["npm", "run", "start"]
